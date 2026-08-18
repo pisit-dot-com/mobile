@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: FirstPage(),
+    );
+  }
+}
+
+// ---------- หน้าแรก: มีข้อมูลอยากส่งไปหน้าถัดไป ----------
+class FirstPage extends StatelessWidget {
+  const FirstPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('First Page')),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Go to Second Page'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SecondPage(
+                  message: 'สวัสดีจากหน้าแรก',   // 👈 ส่งค่านี้ไป
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// ---------- หน้าที่สอง: รับข้อมูลมาแสดง ----------
+class SecondPage extends StatelessWidget {
+  final String message;   // 👈 attribute ไว้เก็บค่าที่รับมา
+
+  const SecondPage({super.key, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Second Page')),
+      body: Center(
+        child: Text(message),   // 👈 เอาค่าที่รับมาไปแสดงผล
+      ),
+    );
+  }
+}

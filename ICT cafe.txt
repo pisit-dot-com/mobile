@@ -1,0 +1,173 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MenuPage(),
+    );
+  }
+}
+
+// ==================== หน้าหลัก (TabBar 3 กลุ่ม) ====================
+class MenuPage extends StatelessWidget {
+  const MenuPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('ICT-Cafe'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.restaurant), text: 'อาหารคาว'),
+              Tab(icon: Icon(Icons.cake), text: 'อาหารหวาน'),
+              Tab(icon: Icon(Icons.local_cafe), text: 'เครื่องดื่ม'),
+            ],
+          ),
+          actions: [
+            // ปุ่มไปหน้าข้อมูลร้าน (Challenge ข้อ push/pop)
+            IconButton(
+              icon: const Icon(Icons.info_outline),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ShopInfoPage()),
+                );
+              },
+            ),
+          ],
+        ),
+        body: TabBarView(
+          children: [
+            savoryTab(),
+            dessertTab(),
+            drinkTab(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ---------- แท็บอาหารคาว ----------
+  Widget savoryTab() {
+    return menuList([
+      MenuItem('ข้าวผัดกะเพราหมู', 50, Icons.rice_bowl),
+      MenuItem('ข้าวมันไก่', 45, Icons.rice_bowl),
+      MenuItem('ผัดไทย', 55, Icons.ramen_dining),
+      MenuItem('ข้าวผัดปู', 60, Icons.rice_bowl),
+      MenuItem('ราดหน้าหมู', 50, Icons.ramen_dining),
+      MenuItem('ก๋วยเตี๋ยวต้มยำ', 45, Icons.ramen_dining),
+    ]);
+  }
+
+  // ---------- แท็บอาหารหวาน ----------
+  Widget dessertTab() {
+    return menuList([
+      MenuItem('ข้าวเหนียวมะม่วง', 60, Icons.icecream),
+      MenuItem('บัวลอย', 35, Icons.icecream),
+      MenuItem('ไอศกรีมวานิลลา', 30, Icons.icecream),
+      MenuItem('เค้กช็อกโกแลต', 65, Icons.cake),
+      MenuItem('ทับทิมกรอบ', 40, Icons.icecream),
+      MenuItem('ฝอยทอง', 30, Icons.cake),
+    ]);
+  }
+
+  // ---------- แท็บเครื่องดื่ม ----------
+  Widget drinkTab() {
+    return menuList([
+      MenuItem('กาแฟเย็น', 45, Icons.local_cafe),
+      MenuItem('ชาเขียวนม', 40, Icons.emoji_food_beverage),
+      MenuItem('น้ำส้มคั้น', 35, Icons.local_drink),
+      MenuItem('ชาไทย', 40, Icons.emoji_food_beverage),
+      MenuItem('โกโก้เย็น', 45, Icons.local_cafe),
+      MenuItem('น้ำมะนาว', 30, Icons.local_drink),
+    ]);
+  }
+
+  // ---------- ตัว helper สร้าง ListView จาก list ของเมนู ----------
+  Widget menuList(List<MenuItem> items) {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return ListTile(
+          leading: Icon(item.icon, size: 40, color: Colors.brown),
+          title: Text(item.name),
+          trailing: Text('฿${item.price}'),
+        );
+      },
+    );
+  }
+}
+
+// ==================== Class เก็บข้อมูลเมนู ====================
+class MenuItem {
+  final String name;
+  final int price;
+  final IconData icon;
+
+  MenuItem(this.name, this.price, this.icon);
+}
+
+// ==================== หน้าข้อมูลร้าน ====================
+class ShopInfoPage extends StatelessWidget {
+  const ShopInfoPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('ข้อมูลร้าน')),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(Icons.local_cafe, size: 100, color: Colors.brown),
+            const SizedBox(height: 16),
+            const Text(
+              'ICT-Cafe',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            infoRow(Icons.location_on, 'ที่อยู่', '123 ถนนเทคโนโลยี เขตการศึกษา กรุงเทพฯ 10900'),
+            infoRow(Icons.access_time, 'เวลาเปิด-ปิด', '08:00 - 20:00 น.'),
+            infoRow(Icons.phone, 'ติดต่อ', '02-123-4567'),
+            infoRow(Icons.facebook, 'Facebook', 'ICT-Cafe Official'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget infoRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Colors.brown),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(value),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
