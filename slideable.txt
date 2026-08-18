@@ -1,0 +1,69 @@
+Slidable(
+  key: Key(items[index]), // ต้อง unique เสมอ
+
+  // Action ที่ปรากฏเมื่อปัดจาก "หน้าไปหลัง" (ซ้ายไปขวา)
+  startActionPane: ActionPane(
+    motion: ScrollMotion(),
+    children: [
+      SlidableAction(
+        onPressed: (context) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Reply All item ?")),
+          );
+        },
+        backgroundColor: Colors.blue,
+        icon: Icons.reply_all,
+        label: 'Reply All',
+      ),
+      // เพิ่ม action สำหรับ Reply เดี่ยว
+      SlidableAction(
+        onPressed: (context) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Reply item ?")),
+          );
+        },
+        backgroundColor: Colors.lightBlue,
+        icon: Icons.reply,
+        label: 'Reply',
+      ),
+    ],
+  ),
+
+  // Action ที่ปรากฏเมื่อปัดจาก "หลังไปหน้า" (ขวาไปซ้าย)
+  endActionPane: ActionPane(
+    motion: ScrollMotion(),
+    children: [
+      SlidableAction(
+        onPressed: (context) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Edit item ?")),
+          );
+        },
+        backgroundColor: Colors.orange,
+        icon: Icons.edit,
+        label: 'Edit',
+      ),
+      // เพิ่ม action สำหรับ archive
+      SlidableAction(
+        onPressed: (context) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Archive item ?")),
+          );
+        },
+        backgroundColor: Colors.green,
+        icon: Icons.archive,
+        label: 'Archive',
+      ),
+      SlidableAction(
+        onPressed: (context) {
+          setState(() => items.removeAt(index));
+        },
+        backgroundColor: Colors.red,
+        icon: Icons.delete,
+        label: 'Delete',
+      ),
+    ],
+  ),
+
+  child: ListTile(title: Text(items[index])),
+)

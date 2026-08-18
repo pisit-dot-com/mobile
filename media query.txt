@@ -1,0 +1,46 @@
+class ResponsivePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // หาความกว้างของหน้าจอเก็บไว้
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // ถ้าจอกว้างมากกว่า 700 ให้ถือว่าเป็นหน้าจอคอมพิวเตอร์
+    bool isDesktop = screenWidth > 700;
+
+    return Scaffold(
+      body: isDesktop ? _buildDesktopLayout() : _buildMobileLayout(),
+    );
+  }
+
+  // --- Desktop Layout: ใช้ Row ---
+  Widget _buildDesktopLayout() {
+    return SingleChildScrollView( // ป้องกัน Overflow แนวตั้ง
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2, // ใช้พื้นที่ 2 ส่วนจาก 5
+            child: ProfileCard(),
+          ),
+          SizedBox(width: 16), // ช่องว่างคั่นกลาง
+          Expanded(
+            flex: 3, // ใช้พื้นที่ 3 ส่วนจาก 5
+            child: InfoList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- Mobile Layout: ใช้ Column ---
+  Widget _buildMobileLayout() {
+    return SingleChildScrollView( // ป้องกัน Overflow แนวตั้ง
+      child: Column(
+        children: [
+          ProfileCard(),
+          SizedBox(height: 16), // ช่องว่างคั่นกลาง
+          InfoList(),
+        ],
+      ),
+    );
+  }
+}

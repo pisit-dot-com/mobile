@@ -1,0 +1,39 @@
+Dismissible(
+  // ต้องกำหนด Key เสมอ ไม่ซ้ำกัน เพื่อให้ Flutter รู้ว่ารายการไหนถูกลบ
+  key: Key(items[index]),
+
+  // Widget ที่แสดงด้านหลังตอนปัด (background)
+  background: Container(
+    color: Colors.red,
+    alignment: Alignment.centerLeft,
+    padding: EdgeInsets.only(left: 20),
+    child: Icon(Icons.delete, color: Colors.white),
+  ),
+
+  // ทิศทางการปัด: endToStart (ขวา->ซ้าย), startToEnd (ซ้าย->ขวา)
+  direction: DismissDirection.endToStart,
+
+  // ยืนยันก่อนลบจริง (optional)
+  confirmDismiss: (direction) async {
+    return await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("ยืนยันการลบ"),
+        content: Text("ต้องการลบรายการนี้ใช่หรือไม่?"),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text("ยกเลิก")),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text("ลบ")),
+        ],
+      ),
+    );
+  },
+
+  // เมื่อปัดสำเร็จ -> ลบข้อมูลออกจาก List จริง
+  onDismissed: (direction) {
+    setState(() {
+      items.removeAt(index);
+    });
+  },
+
+  child: ListTile(title: Text(items[index])),
+)
